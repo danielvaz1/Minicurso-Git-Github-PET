@@ -1,0 +1,84 @@
+📘 Guia – Configuração de Git e GitHub no Laboratório
+
+============================================================
+🔎 1. Verificar logins já existentes no computador
+------------------------------------------------------------
+No terminal, digite:
+    git config --list --show-origin
+
+Isso mostra todas as configurações atuais e de qual arquivo elas vêm.
+
+Exemplo:
+    file:/etc/gitconfig   user.name=Maria
+    file:/home/aluno/.gitconfig   user.email=maria@example.com
+    file:.git/config   remote.origin.url=https://github.com/joao/projeto.git
+
+- Se aparecer outro user.name e user.email, significa que já existe alguém configurado.
+- Se aparecer remote.origin.url com HTTPS, esse repositório usa login via usuário/token.
+
+============================================================
+🗑 2. Como remover logins antigos
+------------------------------------------------------------
+Para apagar usuário e e-mail globais:
+    git config --global --unset user.name
+    git config --global --unset user.email
+
+Se houver credenciais salvas em arquivo:
+    rm ~/.git-credentials
+
+============================================================
+✍️ 3. Configurar o seu login
+------------------------------------------------------------
+Adicione seus dados:
+    git config --global user.name "Seu Nome"
+    git config --global user.email "seu_email@exemplo.com"
+
+⚠️ O e-mail deve ser o mesmo usado no GitHub.
+
+============================================================
+🔑 4. Criar e configurar a chave SSH
+------------------------------------------------------------
+Passos:
+
+Verificar se já existe chave:
+    ls -al ~/.ssh
+
+Criar uma nova chave (se necessário):
+    ssh-keygen -t ed25519 -C "seu_email@exemplo.com"
+
+Ativar a chave:
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_ed25519
+
+Copiar a chave pública:
+    cat ~/.ssh/id_ed25519.pub
+
+Adicionar no GitHub:
+    Settings → SSH and GPG keys → New SSH key
+
+Testar conexão:
+    ssh -T git@github.com
+
+============================================================
+🔗 5. Usar SSH nos repositórios
+------------------------------------------------------------
+Clonar com SSH:
+    git clone git@github.com:usuario/repositorio.git
+
+Trocar remoto de HTTPS para SSH:
+    git remote set-url origin git@github.com:usuario/repositorio.git
+
+============================================================
+🧹 6. Como sair ao final da aula
+------------------------------------------------------------
+Antes de deixar o computador, limpe suas informações:
+
+Remover usuário e e-mail:
+    git config --global --unset user.name
+    git config --global --unset user.email
+
+Apagar credenciais salvas:
+    rm -f ~/.git-credentials
+
+Apagar chaves SSH criadas (opcional):
+    rm -rf ~/.ssh
